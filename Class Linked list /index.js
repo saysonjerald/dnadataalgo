@@ -1,13 +1,20 @@
+/* eslint-disable class-methods-use-this */
+
+// #region  PROCESS
 class LinkedLists {
   constructor(arry) {
-    this.array = arry;
+    const newArr = [];
+    for (let i = 0; i < arry.length; i++) {
+      newArr.push({ value: arry[i], next: i + 1 });
+    }
+
+    this.array = newArr;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   traverse() {
-    // If use didn't input an arrays of data;
     if (!this.array) return;
 
+    // SORTING
     for (let i = 0; i < this.array.length; i++) {
       for (let j = 0; j < i; j++) {
         if (this.array[j].next === null) this.array[j].next = this.array.length;
@@ -23,30 +30,12 @@ class LinkedLists {
     this.array[this.array.length - 1].next = null;
   }
 }
+// #endregion
 
-const data = [
-  {
-    data: 200,
-    next: 2,
-  },
-  {
-    data: 100,
-    next: 1,
-  },
-  {
-    data: 500,
-    next: null,
-  },
-  {
-    data: 400,
-    next: 4,
-  },
-  {
-    data: 300,
-    next: 3,
-  },
-];
+// #region  EXECUTE
+const data = [100, 200, 300, 400, 500];
 
 const newList = new LinkedLists(data);
 newList.traverse();
 console.log(newList.array);
+// #endregion
