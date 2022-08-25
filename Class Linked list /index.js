@@ -29,13 +29,23 @@ class LinkedLists {
 
     this.array[this.array.length - 1].next = null;
   }
+
+  insert(newData) {
+    this.array[this.array.length - 1].next = this.array.length;
+    this.array.push({ value: newData, next: null });
+  }
 }
 // #endregion
 
 // #region  EXECUTE
-const data = [100, 200, 300, 400, 500];
+const data = [200, 100, 500, 400, 300];
 
 const newList = new LinkedLists(data);
+
+// TODO  ------------ TRAVERSING -------------------
 newList.traverse();
+
+// IN
+newList.insert(900);
 console.log(newList.array);
 // #endregion
