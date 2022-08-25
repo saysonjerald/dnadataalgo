@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-shadow */
 /* eslint-disable class-methods-use-this */
 
 // #region  PROCESS
@@ -34,6 +36,35 @@ class LinkedLists {
     this.array[this.array.length - 1].next = this.array.length;
     this.array.push({ value: newData, next: null });
   }
+
+  insertAt(data, index) {
+    if (
+      typeof data !== 'number' &&
+      typeof index !== 'number' &&
+      !data &&
+      !index
+    )
+      return;
+
+    if (index <= 0 && index > this.array.length) return;
+
+    const tempArr = [];
+    for (let i = 0; i < this.array.length; i++) {
+      if (i <= index) {
+        tempArr.push(this.array[i]);
+      }
+
+      if (i === index + 1) {
+        tempArr.push({ value: data, next: this.array[i].next });
+      }
+
+      if (i > index + 1) {
+        tempArr.push(this.array[i]);
+      }
+    }
+
+    this.array = tempArr;
+  }
 }
 // #endregion
 
@@ -45,7 +76,11 @@ const newList = new LinkedLists(data);
 // TODO  ------------ TRAVERSING -------------------
 newList.traverse();
 
-// IN
-newList.insert(900);
+// TODO ------------ INSERTING ---------------------
+newList.insert(4500);
+
+// TODO ------------ INSERT INTO -------------------
+newList.insertAt(34, 4);
+// TODO ------------ VIEW --------------------------
 console.log(newList.array);
 // #endregion
