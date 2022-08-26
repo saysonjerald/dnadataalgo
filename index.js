@@ -1,3 +1,3 @@
-require('./class_linkedList');
-// require('./Class Doubly Linked List');
+// require('./class_linkedList');
+require('./class_doublyLinkedList');
 // require('./Bubble Sort');
