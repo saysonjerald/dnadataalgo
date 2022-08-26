@@ -65,6 +65,8 @@ class LinkedLists {
 
     this.array = tempArr;
   }
+
+  remove(index) {}
 }
 // #endregion
 
@@ -81,6 +83,10 @@ newList.insert(4500);
 
 // TODO ------------ INSERT INTO -------------------
 newList.insertAt(34, 4);
+
+// TODO ------------ REMOVE -------------------
+newList.insertAt(34, 4);
+
 // TODO ------------ VIEW --------------------------
 console.log(newList.array);
 // #endregion
