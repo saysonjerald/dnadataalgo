@@ -5,7 +5,7 @@
 // #region  PROCESS
 class LinkedLists {
   constructor(arry) {
-    const newArr = [];
+    const newArr = null;
     for (let i = 0; i < arry.length; i++) {
       newArr.push({ value: arry[i], next: i + 1 });
     }
@@ -69,6 +69,7 @@ class LinkedLists {
     this.array = tempArr;
   }
 
+  // Remove make it simple.
   removeAt(index) {
     if (
       index < 0 &&
@@ -78,8 +79,7 @@ class LinkedLists {
     )
       return;
 
-    const tempArr = [];
-    let prev;
+    const tempArr = null;
     for (let i = 0; i < this.array.length; i++) {
       if (i < index) {
         tempArr.push(this.array[i]);
@@ -118,7 +118,6 @@ class LinkedLists {
         next: i !== this.array.length - 2 ? this.array[i].next - 1 : null,
       });
     }
-    console.log(tempArr);
     this.array = tempArr;
   }
 }
@@ -136,17 +135,17 @@ newList.traverse();
 // newList.insert(600);
 
 // TODO ------------ INSERT INTO -------------------
-newList.insertAt(250, 2);
-newList.insertAt(299, 3);
+// newList.insertAt(250, 2);
+// newList.insertAt(299, 3);
 
 // TODO ------------ REMOVE AT -------------------
-newList.removeAt(3);
+// newList.removeAt(3);
 
 // TODO ------------ REMOVE HEAD -------------------
-newList.removeHead();
+// newList.removeHead();
 
 // TODO ------------ REMOVE TAIL -------------------
-newList.removeTail();
+// newList.removeTail();
 
 // TODO ------------ VIEW --------------------------
 console.log(newList.array);

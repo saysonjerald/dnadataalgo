@@ -1,21 +1,72 @@
 /* eslint-disable max-classes-per-file */
-/* eslint-disable class-methods-use-this */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-undef */
 class Node {
-  constructor(val) {
-    this.data = val;
+  constructor(value) {
+    this.value = value;
     this.prev = null;
     this.next = null;
   }
 }
-
 class DoublyLinkedList {
   constructor() {
     this.head = null;
     this.tail = null;
+    this.length = 0;
+  }
+
+  insert(val) {
+    if (val === undefined) return;
+
+    const newNode = new Node(val);
+    if (!this.head) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      newNode.prev = this.tail;
+      this.tail = newNode;
+    }
+    this.length++;
+    return this;
+  }
+
+  remove() {
+    if (this.length === 0) return false;
+
+    const popped = this.tail;
+    const newTail = this.tail.prev;
+    if (newTail) {
+      newTail.next = null;
+      this.tail.prev = null;
+    } else {
+      this.head = null;
+    }
+
+    this.tail = newTail;
+    this.length--;
+
+    return popped;
+  }
+
+  removeHead() {
+    if (!this.head) return false;
+
+    const shiftedNode = this.head;
+    const newHead = this.head.next;
+    if (this.head !== this.tail) {
+      newHead.prev = null;
+      shiftedNode.next = null;
+    } else {
+      this.tail = null;
+    }
+    this.head = newHead;
+    this.length--;
+    return shiftedNode;
   }
 
   insertHead(val) {
-    if (!val) return;
+    if (val === undefined) return;
 
     const newNode = new Node(val);
     if (!this.head) {
@@ -26,77 +77,55 @@ class DoublyLinkedList {
       newNode.next = this.head;
       this.head = newNode;
     }
-
+    this.length++;
     return this;
   }
 
-  insertTail(data) {
-    if (!data) return;
+  insertAtIndex(index, val) {
+    if (index < 0 && index > this.length && val === undefined) return false;
 
-    const node = new Node(data);
-    if (!this.head) {
-      this.head = node;
-      this.tail = node;
+    if (index === 0) {
+      this.unshift(val);
+    } else if (index === this.length) {
+      this.insert(val);
     } else {
-      const temp = this.tail;
-      node.prev = temp;
-      temp.next = node;
-      this.tail = node;
+      const newNode = new Node(val);
+      const after = this.getAtIndex(index);
+      const before = after.prev;
+      after.prev = newNode;
+      before.next = newNode;
+      newNode.next = after;
+      newNode.prev = before;
+      this.length++;
     }
-
     return this;
   }
 
-  removeHead() {
-    // in case list is empty
-    if (!this.head) {
+  removeAtIndex(index) {
+    if (index < 0 && index > this.length) return false;
+    let removedNode;
+    if (index >= this.length) {
       return false;
     }
-    // save shifted node to variable
-    const shiftedNode = this.head;
-    // make the new head the next (might be null)
-    const newHead = this.head.next; // might be null
-    // if list is more than 1
-    if (this.head !== this.tail) {
-      newHead.prev = null;
-      shiftedNode.next = null;
+    if (index == 0) {
+      removedNode = this.removeHead();
+    } else if (index == this.length - 1) {
+      removedNode = this.remove();
     } else {
-      this.tail = null;
+      removedNode = this.getAtIndex(index);
+      const after = removedNode.next;
+      const before = removedNode.prev;
+      removedNode.next = null;
+      removedNode.prev = null;
+      before.next = after;
+      after.prev = before;
+      this.length--;
     }
-    this.head = newHead;
-    return shiftedNode;
+    return removedNode;
   }
 
-  removeTail() {
-    if (this.length === 0) {
-      return false;
-    }
-    // get popped node
-    const popped = this.tail;
-    // save newTail to a variable (could be null)
-    const newTail = this.tail.prev;
-    // if newTail is not null
-    if (newTail) {
-      // sever connection to popped node
-      newTail.next = null;
-      // sever connection from popped node
-      this.tail.prev = null;
-      // in case of 1 length list
-    } else {
-      // make sure to edit head in case newTail is null
-      this.head = null;
-    }
-    // assign new tail (could be null)
-    this.tail = newTail;
-
-    return popped;
-  }
-
-  accessAtIndex(index) {
-    if (index >= this.length || index < 0) {
-      return false;
-    }
-
+  getAtIndex(index) {
+    if (index < 0 && index > this.length) return false;
     let currentIndex = 0;
     let currentNode = this.head;
     while (currentIndex !== index) {
@@ -106,30 +135,33 @@ class DoublyLinkedList {
     return currentNode;
   }
 
-  insertAtIndex(index, val) {
-    // if index doesn't exist
-    if (!index && index < 0 && index > this.tail.next) {
-      return;
-    }
-    if (index === 0) {
-      this.insertHead(val);
-    } else if (index === this.tail.next) {
-      this.insertTail(val);
-    } else {
-      const newNode = new Node(val);
-      const after = this.accessAtIndex(index);
-      const before = after.prev;
-      after.prev = newNode;
-      before.next = newNode;
-      newNode.next = after;
-      newNode.prev = before;
-    }
-    return this;
+  traverse() {
+    this.traverse();
   }
 }
 
 const list = new DoublyLinkedList();
-list.insertTail(1).insertTail(2).insertTail(3);
-list.insertAtIndex(2);
 
-console.log(list);
+// TODO ------------ INSERT (TAIL)--------------------------
+list.insert(0).insert(1).insert(2).insert(3).insert(4).insert(5).insert(600);
+
+// TODO ------------ INSERT HEAD -----------------------------
+// list.insertHead('start');
+
+// TODO ------------ INSERT AT INDEX --------------------------
+// list.insertAtIndex(6, 'apple');
+
+// TODO ------------ REMOVE (TAIL) ---------------------------
+// list.remove();
+
+// TODO ------------ REMOVE HEAD -----------------------------
+// list.removeHead();
+
+// TODO ------------ REMOVE AT INDEX --------------------------
+// list.removeAtIndex(0);
+
+// TODO ------------ GET AT INDEX -----------------------------
+// console.log(list.getAtIndex(9));
+
+// TODO ------------ Traverse them using recursion ------------
+list.console.log(list);
