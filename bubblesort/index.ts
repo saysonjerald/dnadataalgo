@@ -13,11 +13,9 @@ class ListNode<T = any> {
 
 class LinkedList<T = any> {
   head: ListNode<T> | null;
-  tail: ListNode<T> | null;
 
   constructor() {
     this.head = null;
-    this.tail = null;
   }
 
   //#region Sir BON's code
@@ -30,7 +28,6 @@ class LinkedList<T = any> {
 
     if (this.head == null) {
       this.head = node;
-      this.tail = node;
       return value;
     }
 
@@ -290,131 +287,86 @@ class LinkedList<T = any> {
     } while (p1Counter !== 0);
   }
 
-  mergeSort() {
-    //Sort and merge
-    const mergeSortWithLL = (head) => {
-      if (head === null || head.next === null) {
-        return head;
-      }
+  mergeSortedList(a, b) {
+    let result = null;
 
-      //Break the list from the middle
-      let middle = llMiddle(head);
-      let middleNext = middle.next;
-      middle.next = null;
+    if (a === null) {
+      return b;
+    }
 
-      //Sort the lower bound
-      let left = mergeSortWithLL(head);
+    if (b === null) {
+      return a;
+    }
 
-      //Sort the upper bound
-      let right = mergeSortWithLL(middleNext);
+    //Recursively merge the list by calling the same function with appropriate next value
+    if (a.value <= b.value) {
+      result = a;
+      result.right = this.mergeSortedList(a.right, b);
+    } else {
+      result = b;
+      result.right = this.mergeSortedList(a, b.right);
+    }
+    return result;
+  }
 
-      //return merged sorted list
-      return sortedMerge(left, right);
-    };
+  getMiddleList(head) {
+    if (head === null) {
+      return head;
+    }
 
-    //Merge the sorted list
-    const sortedMerge = (a, b) => {
-      let result = null;
+    let slow = head,
+      fast = head;
 
-      if (a === null) {
-        return b;
-      }
+    while (fast.right !== null && fast.right.right !== null) {
+      slow = slow.right;
+      fast = fast.right.right;
+    }
 
-      if (b === null) {
-        return a;
-      }
+    return slow;
+  }
 
-      //Recursively merge the list by calling the same function with appropriate next value
-      if (a.element <= b.element) {
-        result = a;
-        result.next = sortedMerge(a.next, b);
-      } else {
-        result = b;
-        result.next = sortedMerge(a, b.next);
-      }
-      return result;
-    };
+  mergeSort(head) {
+    if (head === null || head.right === null) {
+      return head;
+    }
 
-    //Get the middle of the list
-    const llMiddle = (head) => {
-      if (head === null) {
-        return head;
-      }
+    //Break the list from the middle
+    let middle = this.getMiddleList(head);
+    let middleNext = middle.right;
+    middle.right = null;
 
-      let slow = head,
-        fast = head;
+    //Sort the lower bound
+    let left = this.mergeSort(head);
 
-      while (fast.next !== null && fast.next.next !== null) {
-        slow = slow.next;
-        fast = fast.next.next;
-      }
+    //Sort the upper bound
+    let right = this.mergeSort(middleNext);
 
-      return slow;
-    };
+    //return merged sorted list
+    return this.mergeSortedList(left, right);
   }
 }
 
 const list = new LinkedList<number>();
 
-// for (let i = 0; i < 16; i++) {
-//   list.push(Math.ceil(Math.random() * (i + 1)));
-// }
+for (let i = 0; i < 106; i++) {
+  list.push(Math.ceil(Math.random() * (i + 1)));
+}
 
-list.push(24);
-list.push(21);
-list.push(20);
-list.push(19);
-list.push(15);
-list.push(12);
-list.push(10);
-list.push(9);
-list.push(7);
-list.push(7);
-list.push("Hello");
+// list.push(25);
+// list.push(24);
+// list.push(21);
+// list.push(20);
+// list.push(19);
+// list.push(15);
+// list.push(12);
+// list.push(10);
+// list.push(9);
+// list.push(7);
 //#region  UNUSED FUNCTIONS
 
 //#endregion
 
-function removeTail(value: LinkedList): void {
-  if (value.head == null) return null;
-  let cur = value.head;
-  while (cur.right != null) {
-    cur = cur.right;
-  }
-  if (cur.left === value.head) {
-    value.head = null;
-  } else {
-    cur.left.right = null;
-  }
-}
+// list.shellSort();
+list.mergeSort(list.head);
 
-function removeTail2(list: LinkedList) {
-  // If head is null, return because list is empty
-  if (list.head == null) return;
-
-  // While the right of the current_node's right is not null, traveres the list
-  let current_node = list.head;
-  while (current_node.right.right != null) {
-    current_node = current_node.right;
-  }
-  // when the right of the current node's right is null, current_node's right must be the last item on the list, therefore remove the referrence.
-  current_node.right = null;
-}
-
-// removeTail2(list);
-
-function getValues(list) {
-  if (!list) return;
-
-  let current_node = list;
-  const array = [];
-
-  while (current_node != null) {
-    array.push(current_node.value);
-    current_node = current_node.right;
-  }
-
-  return array;
-}
-
-console.log(getValues(list.head));
+console.log(list.getAll());
