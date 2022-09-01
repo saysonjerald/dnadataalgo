@@ -95,6 +95,23 @@ class BinarySearchTree {
     traverse(current);
     return visited;
   }
+
+  BFS() {
+    const visited = [];
+    const queue = [];
+    let current = this.root;
+
+    queue.push(current);
+    while (queue.length) {
+      current = queue.shift();
+      visited.push(current.value);
+
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+
+    return visited;
+  }
 }
 
 const tree = new BinarySearchTree();
@@ -102,3 +119,4 @@ tree.insert(20).insert(15).insert(50).insert(1);
 console.log(tree.preOrder());
 console.log(tree.inOrder());
 console.log(tree.postOrder());
+console.log(tree.BFS());
