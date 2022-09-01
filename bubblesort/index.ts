@@ -1,3 +1,5 @@
+import { lstat } from "fs";
+
 class ListNode<T = any> {
   value: T;
   right: ListNode<T> | null;
@@ -11,9 +13,11 @@ class ListNode<T = any> {
 
 class LinkedList<T = any> {
   head: ListNode<T> | null;
+  tail: ListNode<T> | null;
 
   constructor() {
     this.head = null;
+    this.tail = null;
   }
 
   //#region Sir BON's code
@@ -26,6 +30,7 @@ class LinkedList<T = any> {
 
     if (this.head == null) {
       this.head = node;
+      this.tail = node;
       return value;
     }
 
@@ -191,7 +196,7 @@ class LinkedList<T = any> {
 
   getLength() {
     let list = this.head;
-    let counter = 0;
+    let counter = 1;
     while (list.right != null) {
       list = list.right;
       counter++;
@@ -242,95 +247,174 @@ class LinkedList<T = any> {
     }
   }
 
-  nextGap(spaceGap) {
-    if (spaceGap < 2) return 0;
-    return parseInt(Math.ceil(spaceGap / 2));
-  }
-
   shellSort() {
-    if (this.head == null || this.head.next == null) return;
+    let p1 = this.head;
+    let p2 = p1;
+    let gap = 1;
+    const linkedListLength = this.getLength();
 
-    const gap = this.getLength() / 2;
-    return gap;
+    //Getting the gap
+    while (gap < linkedListLength) {
+      const newGap = gap * 3 + 1;
+
+      if (newGap > linkedListLength - 1) {
+        break;
+      }
+
+      gap = gap * 3 + 1;
+    }
+
+    let p1Counter = gap;
+    let notSorted = true;
+
+    do {
+      let counter = 0;
+      do {
+        if (counter % gap == 0 && counter !== 0) {
+          if (p1.value > p2.value) {
+            this.swapData(p1, p2);
+          }
+          counter = 0;
+        }
+
+        p2 = p2.right;
+        counter++;
+      } while (p2 != null);
+
+      p1 = p1.right;
+      p2 = p1;
+      p1Counter--;
+      if (p1Counter === 0) {
+        this.insertionSort();
+      }
+    } while (p1Counter !== 0);
   }
 
-  returnArray(list: LinkedList) {
-    const array = [];
-    while (list != null) {
-      array.push(list.value);
-      list = list.right;
-    }
-    return array;
+  mergeSort() {
+    //Sort and merge
+    const mergeSortWithLL = (head) => {
+      if (head === null || head.next === null) {
+        return head;
+      }
+
+      //Break the list from the middle
+      let middle = llMiddle(head);
+      let middleNext = middle.next;
+      middle.next = null;
+
+      //Sort the lower bound
+      let left = mergeSortWithLL(head);
+
+      //Sort the upper bound
+      let right = mergeSortWithLL(middleNext);
+
+      //return merged sorted list
+      return sortedMerge(left, right);
+    };
+
+    //Merge the sorted list
+    const sortedMerge = (a, b) => {
+      let result = null;
+
+      if (a === null) {
+        return b;
+      }
+
+      if (b === null) {
+        return a;
+      }
+
+      //Recursively merge the list by calling the same function with appropriate next value
+      if (a.element <= b.element) {
+        result = a;
+        result.next = sortedMerge(a.next, b);
+      } else {
+        result = b;
+        result.next = sortedMerge(a, b.next);
+      }
+      return result;
+    };
+
+    //Get the middle of the list
+    const llMiddle = (head) => {
+      if (head === null) {
+        return head;
+      }
+
+      let slow = head,
+        fast = head;
+
+      while (fast.next !== null && fast.next.next !== null) {
+        slow = slow.next;
+        fast = fast.next.next;
+      }
+
+      return slow;
+    };
   }
 }
 
 const list = new LinkedList<number>();
 
-const to = 1000;
-list;
-for (let i = 0; i <= to; i++) {
-  list.push(Math.floor(Math.random() * (to + 1)));
-}
+// for (let i = 0; i < 16; i++) {
+//   list.push(Math.ceil(Math.random() * (i + 1)));
+// }
 
+list.push(24);
+list.push(21);
+list.push(20);
+list.push(19);
+list.push(15);
+list.push(12);
+list.push(10);
+list.push(9);
+list.push(7);
+list.push(7);
+list.push("Hello");
 //#region  UNUSED FUNCTIONS
-// list.push(3);
-// list.push(1);
-// list.push(5);
-// list.push(2);
-// list.push(6);
-// list.push(4);
-
-// console.log(`Items`, list.getAll());
-// console.log(`At 0 `, list.get(0));
-// console.log(`At 1 `, list.get(1));
-// console.log(`At 3 `, list.get(3));
-// console.log(`Remove 2 `, list.remove(2));
-// console.log(`Items`, list.getAll());
-// console.log(`Shift Once`, list.shift());
-// console.log(`Shift Twice`, list.shift());
-// console.log(`Items`, list.getAll());
-// console.log(`Push 10 `, list.push(10));
-// console.log(`Push 20 `, list.push(20));
-// console.log(`Push 30 `, list.push(30));
-// console.log(`Items`, list.getAll());
-// console.log(`Pop Once`, list.pop());
-// console.log(`Items`, list.getAll());
-
-// console.log(`Splice 100 at 1`, list.splice(100, 1));
-// console.log(`Items`, list.getAll());
-// console.log(`Pop Once`, list.pop());
-// console.log(`Items`, list.getAll());
-// console.log(`Pop Once`, list.pop());
-// console.log(`Items`, list.getAll());
-// console.log(`Pop Once`, list.pop());
-// console.log(`Items`, list.getAll());
-// console.log(`Push 30 `, list.push(30));
-// console.log(`Items`, list.getAll());
-// console.log(`Shift Once`, list.shift());
-// console.log(`Items`, list.getAll());
-// console.log(`Shift Once`, list.shift());
-
-// list.push(10);
-// list.push(20);
-// list.push(40);
-// list.push(50);
-// console.log(`Items`, list.getAll());
-// console.log(
-//   `Multiply by 2`,
-//   list.map<number>((item) => item * 2)
-// );
-// console.log(
-//   `For Each Item`,
-//   list.forEach((item) => console.log(item))
-// );
 
 //#endregion
 
-// console.log(list.bubbleSort(list));
-// list.insertionSort();`
-// list.shellSort(list.head);
-// console.log(list.getLength());
-// console.log(list.shellSort());
-console.log(list.returnArray(list.head));
-// console.log(list.getAll());
-// console.log(list.isSorted(list));
+function removeTail(value: LinkedList): void {
+  if (value.head == null) return null;
+  let cur = value.head;
+  while (cur.right != null) {
+    cur = cur.right;
+  }
+  if (cur.left === value.head) {
+    value.head = null;
+  } else {
+    cur.left.right = null;
+  }
+}
+
+function removeTail2(list: LinkedList) {
+  // If head is null, return because list is empty
+  if (list.head == null) return;
+
+  // While the right of the current_node's right is not null, traveres the list
+  let current_node = list.head;
+  while (current_node.right.right != null) {
+    current_node = current_node.right;
+  }
+  // when the right of the current node's right is null, current_node's right must be the last item on the list, therefore remove the referrence.
+  current_node.right = null;
+}
+
+// removeTail2(list);
+
+function getValues(list) {
+  if (!list) return;
+
+  let current_node = list;
+  const array = [];
+
+  while (current_node != null) {
+    array.push(current_node.value);
+    current_node = current_node.right;
+  }
+
+  return array;
+}
+
+console.log(getValues(list.head));

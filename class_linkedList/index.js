@@ -5,7 +5,7 @@
 // #region  PROCESS
 class LinkedLists {
   constructor(arry) {
-    const newArr = null;
+    const newArr = [];
     for (let i = 0; i < arry.length; i++) {
       newArr.push({ value: arry[i], next: i + 1 });
     }
@@ -79,7 +79,7 @@ class LinkedLists {
     )
       return;
 
-    const tempArr = null;
+    const tempArr = [];
     for (let i = 0; i < this.array.length; i++) {
       if (i < index) {
         tempArr.push(this.array[i]);
@@ -96,29 +96,31 @@ class LinkedLists {
   }
 
   removeHead() {
-    if (!this.array.length) return;
+    // if (!this.array.length) return;
 
-    const tempArr = [];
-    for (let i = 1; i < this.array.length; i++) {
-      tempArr.push({
-        value: this.array[i].value,
-        next: i !== this.array.length - 1 ? this.array[i].next - 1 : null,
-      });
-    }
-    this.array = tempArr;
+    // const tempArr = [];
+    // for (let i = 1; i < this.array.length; i++) {
+    //   tempArr.push({
+    //     value: this.array[i].value,
+    //     next: i !== this.array.length - 1 ? this.array[i].next - 1 : null,
+    //   });
+    // }
+    // this.array = tempArr;
+    this.removeAt(0);
   }
 
   removeTail() {
-    if (!this.array.length) return;
+    // if (!this.array.length) return;
 
-    const tempArr = [];
-    for (let i = 0; i < this.array.length - 1; i++) {
-      tempArr.push({
-        value: this.array[i].value,
-        next: i !== this.array.length - 2 ? this.array[i].next - 1 : null,
-      });
-    }
-    this.array = tempArr;
+    // const tempArr = [];
+    // for (let i = 0; i < this.array.length - 1; i++) {
+    //   tempArr.push({
+    //     value: this.array[i].value,
+    //     next: i !== this.array.length - 2 ? this.array[i].next - 1 : null,
+    //   });
+    // }
+    // this.array = tempArr;
+    this.removeAt(this.array.length - 1);
   }
 }
 // #endregion
